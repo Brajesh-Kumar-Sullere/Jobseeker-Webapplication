@@ -1,5 +1,5 @@
 import { config } from "dotenv";
-config({ path: "./config/config.env" });
+config({ path: "./config/config.env" });  
 export const sendToken = (user, statusCode, res, message) => {
   const token = user.getJWTToken();
   const options = {

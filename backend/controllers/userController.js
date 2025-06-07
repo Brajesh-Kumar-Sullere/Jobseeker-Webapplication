@@ -2,6 +2,8 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncError.js";
 import { User } from "../models/userSchema.js";
 import ErrorHandler from "../middlewares/error.js";
 import { sendToken } from "../utils/jwtToken.js";
+import { config } from "dotenv";
+config({ path: "./config/config.env" });
 
 export const register = catchAsyncErrors(async (req, res, next) => {
   try{
@@ -53,12 +55,13 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const logout = catchAsyncErrors(async (req, res, next) => {
-  res
-    .status(201)
-    .cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    })
+res
+  .status(200)
+  .clearCookie("token", {
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    secure: process.env.NODE_ENV === "production",
+  })
     .json({
       success: true,
       message: "Logged Out Successfully.",
